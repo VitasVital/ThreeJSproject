@@ -224,7 +224,66 @@ wingPlane2.position.z = -6
 wingPlane2.position.x = 2
 plane.add(wingPlane2)
 
-// Floor
+plane.position.y = 10
+
+/**
+ * Bus
+ */
+// Terminal container
+const bus = new THREE.Group()
+scene.add(bus)
+
+const wallsBus = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 1),
+    new THREE.MeshStandardMaterial({
+        map: bricksColorTexture,
+        aoMap: bricksAmbientOcclusionTexture,
+        normalMap: bricksNormalTexture,
+        roughnessMap: bricksRoughnessTexture
+    }))
+wallsBus.position.y = 0.75
+wallsBus.position.x = 10
+wallsBus.position.z = -10
+wallsBus.rotation.y = - Math.PI / 4
+wallsBus.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(wallsBus.geometry.attributes.uv.array, 2))
+bus.add(wallsBus)
+
+const wheelBus1 = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.1, 12),
+    new THREE.MeshStandardMaterial({color: '#847a7a'}))
+wheelBus1.position.y = 0.2
+wheelBus1.position.x = 10.5
+wheelBus1.position.z = -9.5
+wheelBus1.rotation.z += Math.PI / 2
+bus.add(wheelBus1)
+
+const wheelBus2 = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.1, 12),
+    new THREE.MeshStandardMaterial({color: '#847a7a'}))
+wheelBus2.position.y = 0.2
+wheelBus2.position.x = 9.5
+wheelBus2.position.z = -9.5
+wheelBus2.rotation.z += Math.PI / 2
+bus.add(wheelBus2)
+
+const wheelBus3 = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.1, 12),
+    new THREE.MeshStandardMaterial({color: '#847a7a'}))
+wheelBus3.position.y = 0.2
+wheelBus3.position.x = 10.5
+wheelBus3.position.z = -10.5
+wheelBus3.rotation.z += Math.PI / 2
+bus.add(wheelBus3)
+
+const wheelBus4 = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.1, 12),
+    new THREE.MeshStandardMaterial({color: '#847a7a'}))
+wheelBus4.position.y = 0.2
+wheelBus4.position.x = 9.5
+wheelBus4.position.z = -10.5
+wheelBus4.rotation.z += Math.PI / 2
+bus.add(wheelBus4)
+
+bus.position.z = 4
+
+/**
+ * Floor
+ */
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(40, 40),
     new THREE.MeshStandardMaterial({
@@ -286,6 +345,17 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
+window.addEventListener('keydown', (event) => {
+    if (event.code === 'KeyA')
+    {
+        plane.rotation.y += 0.1;
+    }
+})
+
+window.addEventListener('mousemove', () => {
+    bus.rotation.y += 0.01;
+})
+
 /**
 * Camera
 */
@@ -318,6 +388,9 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 const clock = new THREE.Clock()
 
 const tick = () => {
+
+    // plane.rotation.z -= Math.PI / 16
+
     // Update controls
     controls.update()
 
