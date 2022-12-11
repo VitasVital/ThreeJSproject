@@ -4,6 +4,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
 import {FontLoader} from "three/src/loaders/FontLoader.js";
 import { TextGeometry} from "three/src/geometries/TextGeometry.js";
+import {gsap} from "gsap";
 
 /**
  * Base
@@ -200,7 +201,7 @@ const wallsPlane = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 6, 12),
         roughnessMap: planeRoughnessTexture
     }))
 wallsPlane.position.y = 1
-wallsPlane.position.z = -6
+wallsPlane.position.z = -12
 wallsPlane.rotation.x = Math.PI / 2
 wallsPlane.rotation.z = Math.PI / 2
 wallsPlane.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(wallsPlane.geometry.attributes.uv.array, 2))
@@ -215,7 +216,7 @@ const nosePlane = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.75, 1.5, 12),
         roughnessMap: planeRoughnessTexture
     }))
 nosePlane.position.y = 0.7
-nosePlane.position.z = -6
+nosePlane.position.z = -12
 nosePlane.position.x = -3.5
 nosePlane.rotation.x = Math.PI / 2
 nosePlane.rotation.z = Math.PI / 2
@@ -231,7 +232,7 @@ const tailPlane = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.2, 1.5, 12),
         roughnessMap: planeRoughnessTexture
     }))
 tailPlane.position.y = 1.3
-tailPlane.position.z = -6
+tailPlane.position.z = -12
 tailPlane.position.x = 3.5
 tailPlane.rotation.x = Math.PI / 2
 tailPlane.rotation.z = Math.PI / 2
@@ -246,7 +247,7 @@ const wingPlane1 = new THREE.Mesh(new THREE.BoxGeometry(1, 0.1, 8),
         roughnessMap: planeRoughnessTexture
     }))
 wingPlane1.position.y = 1
-wingPlane1.position.z = -6
+wingPlane1.position.z = -12
 wingPlane1.position.x = -1
 plane.add(wingPlane1)
 
@@ -258,7 +259,7 @@ const wingPlane2 = new THREE.Mesh(new THREE.BoxGeometry(1, 0.1, 4),
         roughnessMap: planeRoughnessTexture
     }))
 wingPlane2.position.y = 1
-wingPlane2.position.z = -6
+wingPlane2.position.z = -12
 wingPlane2.position.x = 2
 plane.add(wingPlane2)
 
@@ -485,9 +486,13 @@ window.addEventListener('dblclick', ()=>{
 })
 
 window.addEventListener('keydown', (event) => {
-    if (event.code === 'KeyA')
+    if (event.code === 'KeyW')
     {
-        plane.rotation.y += 0.1;
+        plane.position.y += 0.5;
+    }
+    if (event.code === 'KeyS')
+    {
+        plane.position.y -= 0.5;
     }
 })
 
@@ -521,15 +526,16 @@ renderer.setClearColor('#262837')
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
+plane.position.x = 80
+let planeGsap = gsap.timeline({repeat: 2, repeatDelay: 1});
+planeGsap.to(plane.position, { duration: 10, x: -50 });
+
 /**
  * Animate
  */
 const clock = new THREE.Clock()
 
 const tick = () => {
-
-    // plane.rotation.z -= Math.PI / 16
-
     // Update controls
     controls.update()
 
